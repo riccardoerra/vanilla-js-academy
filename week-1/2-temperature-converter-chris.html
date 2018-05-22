@@ -117,19 +117,31 @@
 		</div>
 	</div>
 
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 	<script>
-        var f = document.querySelector('#farenheit');
-        var c = document.querySelector('#celcius');
-        var fValue = f.value;
-        var cValue = c.value;
+		// Variables
+		var farenheit = document.querySelector('#farenheit');
+		var celcius = document.querySelector('#celcius');
 
-        f.addEventListener('click', function (event) {
-			console.log(fValue);
-        }, false);
-        
-        c.addEventListener('click', function (event) {
-			console.log(cValue);
+		// Convert temp
+		var convert = function (temp, toFarenheit) {
+			if (toFarenheit) {
+				return Math.round((parseInt(temp, 10) * 9/5) + 32);
+			} else {
+				return Math.round((parseInt(temp, 10) - 32) * 5/9);
+			}
+		};
+
+		// Listen for input changes
+		document.addEventListener('input', function (event) {
+			if (event.target.value.length < 1) return;
+			if (event.target.id === 'farenheit') {
+				celcius.value = convert(event.target.value);
+			} else {
+				farenheit.value = convert(event.target.value, true);
+			}
 		}, false);
+
 	</script>
 
 </body>
