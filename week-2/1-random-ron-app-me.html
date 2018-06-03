@@ -95,14 +95,61 @@
 
   <h1>Random Ron Swanson</h1>
 
-  <blockquote></blockquote>
+  <blockquote>Click on More Ron to get some amazing random Ron Swanson's quotes</blockquote>
 
-  <p>
-    <button>More Ron</button>
-  </p>
+  <button>More Ron</button>
 
   <script>
-    // Your code will go here...
+    var makeRequest = function (url, method, success, failure, always) {
+
+      // Make sure a URL and method were provided
+      if (!url || !method) return;
+
+      // Set up our HTTP request
+      var xhr = new XMLHttpRequest();
+
+      // Setup our listener to process completed requests
+      xhr.onload = function () {
+
+        // Process our return data
+        if (xhr.status >= 200 && xhr.status < 300) {
+          // Run the success callback
+          if (success && typeof success === 'function') {
+            success(JSON.parse(xhr.responseText), xhr);
+          }
+        } else {
+          // Run the failure callback
+          if (failure && typeof failure === 'function') {
+            failure(xhr);
+          }
+        }
+
+        if (always && typeof always === 'function') {
+          always(JSON.parse(xhr.responseText), xhr);
+        }
+
+      };
+
+      // Create and send a request
+      // Defaults to GET
+      xhr.open(method, url);
+      xhr.send();
+
+    };
+
+    var btn = document.querySelector('button');
+    var target = document.querySelector('h1');
+    var blockquote = document.createElement('blockquote');
+
+    btn.addEventListener('click', function (event) {
+      makeRequest('http://ron-swanson-quotes.herokuapp.com/v2/quotes', 'GET', function (quotes) {
+        quotes.forEach(function (quote) {
+          blockquote.textContent = quote;
+        });
+      });
+
+      target.after(blockquote);
+    }, false);
   </script>
 
 </body>
