@@ -69,7 +69,23 @@
   </div>
 
   <script>
-		// Code goes here...
+    var selectTab = function () {
+
+      var links = document.querySelectorAll('a');
+      var tabs = document.querySelectorAll('.tab-pane');
+
+      window.addEventListener('click', function (event) {
+
+        if (event.target === links) {
+          console.log('test')
+        }
+
+      }, false);
+
+    };
+
+    selectTab();
+
   </script>
 
 </body>
