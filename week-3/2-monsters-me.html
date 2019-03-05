@@ -171,33 +171,82 @@
 				'monster11.svg'
 			];
 
+			/**
+ * Randomly shuffle an array
+ * https://stackoverflow.com/a/2450976/1293256
+ * @param  {Array} array The array to shuffle
+ * @return {String}      The first item in the shuffled array
+ */
+			var shuffle = function (array) {
+
+				var currentIndex = array.length;
+				var temporaryValue, randomIndex;
+
+				// While there remain elements to shuffle...
+				while (0 !== currentIndex) {
+					// Pick a remaining element...
+					randomIndex = Math.floor(Math.random() * currentIndex);
+					currentIndex -= 1;
+
+					// And swap it with the current element.
+					temporaryValue = array[currentIndex];
+					array[currentIndex] = array[randomIndex];
+					array[randomIndex] = temporaryValue;
+				}
+
+				return array;
+
+			};
+
+			shuffle(monsters);
+
+			// remove loading text
 			var app = document.querySelector('#app');
 			app.textContent = '';
 
+			// create outer grid div
 			var grid = document.createElement('div');
 			grid.className = 'row';
 
+			// how many monsters
+			var total = monsters.length;
+
+			// for each grid block
 			monsters.forEach(function (monster, index) {
+				// create an inner div
 				var innerGrid = document.createElement('div');
 				innerGrid.className = 'grid';
 
-				// innerGrid.textContent = 'Door ' + [index + 1];
+				// create the door image
+				var imageDoor = document.createElement('img');
+				imageDoor.className = 'door';
+				imageDoor.setAttribute('src', 'door.svg');
 
-				var image = document.createElement('img');
-				image.setAttribute('src', 'door.svg');
+				// show what's behind door when click on it
+				imageDoor.addEventListener('click', function (event) {
+					imageDoor.setAttribute('src', monster);
 
-				window.addEventListener('click', function (event) {
-					if (event.target.classList.contains('grid')) {
-						this.image.setAttribute('src', monster);
-						console.log('click');
+					// check if there's socks behind the door
+					if (monster === 'socks.svg') {
+						grid.textContent = 'Sock! You lost... Wanna play again? Refresh this window.';
+					};
+
+					// check if avoided socks
+					total = total - 1;
+					if (total < 2) {
+						grid.textContent = 'You found all the monsters! You won... Wanna play again? Refresh this window.';
 					}
+
 				}, false);
 
-				innerGrid.append(image);
+				// append image to block
+				innerGrid.append(imageDoor);
 
+				// append block to grid
 				grid.append(innerGrid);
 			});
 
+			// append grid to container
 			app.prepend(grid);
 		</script>
 
